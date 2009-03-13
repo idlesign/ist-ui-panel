@@ -1,5 +1,5 @@
 /*
- * Panel Draft 0.1b
+ * Panel Draft 0.2
  * for jQuery UI
  *
  * Copyright (c) 2009 idle sign
@@ -30,12 +30,13 @@
 				// need separate titleBox and titleTextBox to avoid possible collapse/draggable issues
 				this.titleBox = this.headerBox.children().eq(0);
 				this.titleTextBox = this.titleBox.children().eq(0);
-				this.headerBox.prepend('<span><span></span></span>')
+				this.headerBox.prepend('<span></span>')
 				this.rightBox = this.headerBox.children().eq(0).addClass(o.rightboxClass);
 
 				// setting up controls
 				if (o.controls!=false){
 					// suppose 'o.controls' should be a ui.toolbar control
+					this.rightBox.append('<span></span>');
 					this.controlsBox = this.rightBox.children().eq(0).addClass(o.controlsClass).html(o.controls);
 				}
 
@@ -50,7 +51,7 @@
 				if (o.collapsible){					
 					switch (o.collapseType) {
 						case 'slide-right':
-							this.rightBox.append('<span><span></span></span>');
+							this.rightBox.append('<span><span/></span>');
 							this.collapsePanel = this.rightBox.children().eq(1)
 								.addClass(o.collapsePnlClass)
 								.css({
@@ -63,7 +64,7 @@
 							this.iconBtn = o.slideRIcon;
 							break;
 						case 'slide-left':
-							this.headerBox.prepend('<span><span></span></span>');
+							this.headerBox.prepend('<span><span/></span>');
 							this.collapsePanel = this.headerBox.children().eq(0)
 								.addClass(o.collapsePnlClass)
 								.css({
@@ -76,7 +77,7 @@
 							this.iconBtn = o.slideLIcon;
 							break;
 						default:
-							this.headerBox.prepend('<span></span>');
+							this.headerBox.prepend('<span><span/></span>');
 							this.collapseButton = this.headerBox.children().eq(0).addClass(o.headerIcon);
 							this.iconBtnClpsd = o.headerIconClpsd;
 							this.iconBtn = o.headerIcon;
@@ -167,6 +168,19 @@
 			}
 		},
 
+		destroy: function(){
+			var o = this.options;
+
+			this.panelBox
+				.removeAttr('role')
+				.removeClass(o.widgetClass);
+			this.headerBox
+				.html(this.titleTextBox.html())
+				.removeClass(o.headerClass);
+			this.contentBox
+				.removeClass(o.contentClass);
+		},
+
 		_buttonHover: function(el){
 			var o = this.options;
 
@@ -178,7 +192,7 @@
 	});
 
 	$.extend($.ui.panel, {
-		version: '0.1b',
+		version: '0.2',
 		defaults: {
 			collapsible: true,
 			collapseType: 'default',
