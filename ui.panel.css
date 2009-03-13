@@ -1,0 +1,13 @@
+/* Panel
+----------------------------------*/
+.ui-panel { text-align:left; }
+.ui-panel-header { margin:0;padding:0; }
+.ui-panel-header .ui-icon { border:0; float:left; margin:0.2em 0.1em 0 0; }
+.ui-panel-title { margin:0.3em 0 0.3em 0.1em; }
+.ui-panel-title-text { margin-left:0.3em; }
+.ui-panel-title-text, .ui-panel .ui-icon { cursor:pointer; }
+.ui-panel-rightbox { float:right; }
+.ui-panel-rightbox .ui-icon { border:0; margin-right:0.1em; }
+.ui-panel-controls { float:left; margin: 0.2em 0.7em 0 0;}
+.ui-panel-content { padding:0.7em 0.4em 0.7em 0.4em; }
+.ui-panel-clps-pnl { border:1px solid #999; float:left; padding:0 0.25em 0.3em 0.25em; }
