@@ -127,11 +127,11 @@
 						titleTextBox.html(titleTextBox.text().replace(/<BR>/g, ' '));
 						panelBox.animate( {width: o.width}, collapseSpeed );
 					}
-
+					
 					o.collapsed = !o.collapsed;
-
 				}
 				btn.toggleClass(ibc).toggleClass(ib);
+				headerBox.toggleClass('ui-corner-all');
 			}
 		},
 
@@ -168,14 +168,14 @@
 			// suppose that we need ui.toolbar with controls here
 			controls: false,
 			// styling
-			widgetClass: 'ui-panel ui-widget ui-corner-all',
-			headerClass: 'ui-helper-reset ui-widget-header ui-panel-header',
-			contentClass: 'ui-widget-content ui-panel-content',
+			widgetClass: 'ui-helper-reset ui-widget ui-panel',
+			headerClass: 'ui-helper-reset ui-widget-header ui-panel-header ui-corner-top',
+			contentClass: 'ui-helper-reset ui-widget-content ui-panel-content ui-corner-bottom',
 			rightboxClass: 'ui-panel-rightbox',
 			controlsClass: 'ui-panel-controls',
 			titleClass: 'ui-panel-title',
 			titleTextClass: 'ui-panel-title-text',
-			iconClass: 'ui-icon ui-icon-default',
+			iconClass: 'ui-icon',
 			hoverClass: 'ui-state-hover',
 			collapsePnlClass: 'ui-panel-clps-pnl',
 			//icons
