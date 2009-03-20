@@ -138,14 +138,15 @@
 		destroy: function(){
 			var o = this.options;
 
-			this.panelBox
-				.removeAttr('role')
-				.removeClass(o.widgetClass);
 			this.headerBox
 				.html(this.titleTextBox.html())
 				.removeClass(o.headerClass);
 			this.contentBox
 				.removeClass(o.contentClass);
+			this.panelBox
+				.removeAttr('role')
+				.removeClass(o.widgetClass)
+				.remove();
 		},
 
 		_buttonHover: function(el){
