@@ -145,8 +145,7 @@
 				.removeClass(o.contentClass);
 			this.panelBox
 				.removeAttr('role')
-				.removeClass(o.widgetClass)
-				.remove();
+				.removeClass(o.widgetClass);
 		},
 
 		_buttonHover: function(el){
