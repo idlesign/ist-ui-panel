@@ -1,5 +1,5 @@
 /*
- * Panel Draft 0.2.1
+ * Panel Draft 0.2.2
  * for jQuery UI
  *
  * Copyright (c) 2009 idle sign
@@ -15,7 +15,8 @@
 		_init: function() {
 			
 			if (this.element.is('div')) {
-				var o = this.options;
+				var o = this.options,
+					self = this;
 
 				this.panelBox = this.element;
 				o.width = this.panelBox.css('width');
@@ -73,14 +74,17 @@
 							break;
 					}
 
-					var toggleFn = this._toggle(o.collapseSpeed);
 					this._buttonHover(this.collapseButton);
-					this.collapseButton.addClass(o.iconClass).bind('click', toggleFn );
-					this.titleTextBox.bind('click', toggleFn );
+					this.collapseButton.addClass(o.iconClass);
+					if (o.event) {
+						this.collapseButton.bind((o.event) + ".panel", function(event) { return self._clickHandler.call(self, event, this); });
+						this.titleTextBox.bind((o.event) + ".panel", function(event) { return self._clickHandler.call(self, event, this); });
+					}
 
 					// panel collapsed
 					if (o.collapsed) {
-						$( this._toggle(0) );
+						// trigger collapse
+						this._toggle(0);
 					}
 				}
 
@@ -90,6 +94,14 @@
 
 		},
 
+		_clickHandler: function(event, target){
+			var o = this.options;
+			
+			if (o.disabled) return false;
+			this._toggle(o.collapseSpeed);
+			return false;
+		},
+		
 		_toggle: function (collapseSpeed){
 			var o = this.options,
 				btn = this.collapseButton,
@@ -100,39 +112,43 @@
 				headerBox = this.headerBox,
 				titleTextBox = this.titleTextBox,
 				ctrlBox = this.ctrlBox;
-			
-			return function(){				
-				if (ctrlBox) ctrlBox.toggle(0);
-				if (o.collapseType=='default'){
-					// different content sliding animation
-					if (collapseSpeed==0) {
-						if (ctrlBox) ctrlBox.hide();
-						contentBox.hide();
-					} else contentBox.slideToggle(collapseSpeed);
-				} else {
-					if (collapseSpeed==0) {
-						// reverse collapsed option for immediate folding
-						o.collapsed=false;
-						if (ctrlBox) ctrlBox.hide();
-						contentBox.hide();
-					} else contentBox.toggle();
 
-					// vertical text workaround - to be replaced with more clever
-					if (o.collapsed==false){
-						headerBox.attr('align','center');
-						titleTextBox.html(titleTextBox.text().replace(/(.)/g, '$1<BR>'));
-						panelBox.animate( {width: '2.4em'}, collapseSpeed );
-					} else {						
-						headerBox.attr('align','left');
-						titleTextBox.html(titleTextBox.text().replace(/<BR>/g, ' '));
-						panelBox.animate( {width: o.width}, collapseSpeed );
-					}
-					
-					o.collapsed = !o.collapsed;
+			// split toggle into 'fold' and 'unfold' actions and handle callbacks
+			if (contentBox.css('display')=='none') this._trigger("unfold");
+			else this._trigger("fold");
+
+			if (ctrlBox) ctrlBox.toggle(0);
+			if (o.collapseType=='default'){
+				// different content sliding animation
+				if (collapseSpeed==0) {
+					if (ctrlBox) ctrlBox.hide();
+					contentBox.hide();
+				} else contentBox.slideToggle(collapseSpeed);
+			} else {
+				if (collapseSpeed==0) {
+					// reverse collapsed option for immediate folding
+					o.collapsed=false;
+					if (ctrlBox) ctrlBox.hide();
+					contentBox.hide();
+				} else contentBox.toggle();
+
+				// vertical text workaround - to be replaced with more clever in future
+				if (o.collapsed==false){
+					headerBox.attr('align','center');
+					titleTextBox.html(titleTextBox.text().replace(/(.)/g, '$1<BR>'));
+					panelBox.animate( {width: '2.4em'}, collapseSpeed );
+				} else {
+					headerBox.attr('align','left');
+					titleTextBox.html(titleTextBox.text().replace(/<BR>/g, ' '));
+					panelBox.animate( {width: o.width}, collapseSpeed );
 				}
-				btn.toggleClass(ibc).toggleClass(ib);
-				headerBox.toggleClass('ui-corner-all');
+
+				o.collapsed = !o.collapsed;
 			}
+
+			// css animation for header and button
+			btn.toggleClass(ibc).toggleClass(ib);
+			headerBox.toggleClass('ui-corner-all');
 		},
 
 		destroy: function(){
@@ -145,6 +161,7 @@
 				.removeClass(o.contentClass);
 			this.panelBox
 				.removeAttr('role')
+				.unbind('.panel')
 				.removeClass(o.widgetClass);
 		},
 
@@ -159,8 +176,9 @@
 	});
 
 	$.extend($.ui.panel, {
-		version: '0.2.1',
+		version: '0.2.2',
 		defaults: {
+			event: 'click',
 			collapsible: true,
 			collapseType: 'default',
 			collapsed: false,
