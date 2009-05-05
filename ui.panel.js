@@ -1,8 +1,12 @@
 /*
- * Panel Draft 0.2.2
+ * Panel Draft 0.2.3
  * for jQuery UI
  *
  * Copyright (c) 2009 idle sign
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ * http://code.google.com/p/ist-ui-panel/
  *
  * Depends:
  *	ui.core.js
@@ -15,12 +19,13 @@
 		_init: function() {
 			
 			if (this.element.is('div')) {
-				var o = this.options,
-					self = this;
+				var self = this,
+					o = this.options;
 
 				this.panelBox = this.element;
 				o.width = this.panelBox.css('width');
 				this.panelBox.attr('role', 'panel')
+				o.id = this.panelBox.attr('id')
 				// prevent blinking
 				this.panelBox.hide();
 				this.headerBox = this.element.children().eq(0);
@@ -47,7 +52,8 @@
 				this.contentBox.addClass(o.contentClass);
 
 				// collapsibility
-				if (o.collapsible){					
+				if (o.collapsible){
+
 					switch (o.collapseType) {
 						case 'slide-right':
 							this.rightBox.append('<span><span/></span>');
@@ -81,29 +87,49 @@
 						this.titleTextBox.bind((o.event) + ".panel", function(event) { return self._clickHandler.call(self, event, this); });
 					}
 
-					// panel collapsed
-					if (o.collapsed) {
-						// trigger collapse
-						this._toggle(0);
+					// collapse panel if 'accordion' option is set
+					if (o.accordion) {
+						o.collapsed = true;
 					}
-				}
 
-				//alert(this.titleBox.html());
+					// restore state from cookie
+					if (o.cookie) {
+						if (self._cookie()==0) {
+							o.collapsed = false;
+						} else {
+							o.collapsed = true;
+						}
+					}
+
+					this.panelBox.attr('collapsed', o.collapsed);
+
+					// panel collapsed - trigger action
+					if (o.collapsed) {
+						self.toggle(0, true);
+					}
+
+				}
 				this.panelBox.show();
 			}
 
+		},
+
+		_cookie: function() {
+			var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-panel-' + $.data(this.options.id));
+			return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 		},
 
 		_clickHandler: function(event, target){
 			var o = this.options;
 			
 			if (o.disabled) return false;
-			this._toggle(o.collapseSpeed);
+			this.toggle(o.collapseSpeed);
 			return false;
 		},
 		
-		_toggle: function (collapseSpeed){
-			var o = this.options,
+		toggle: function (collapseSpeed, innerCall){
+			var self = this,
+				o = this.options,
 				btn = this.collapseButton,
 				ibc = this.iconBtnClpsd,
 				ib = this.iconBtn,
@@ -142,9 +168,24 @@
 					titleTextBox.html(titleTextBox.text().replace(/<BR>/g, ' '));
 					panelBox.animate( {width: o.width}, collapseSpeed );
 				}
+			}
 
+			// only if not initially folded
+			if (collapseSpeed!=0) {
 				o.collapsed = !o.collapsed;
 			}
+
+			panelBox.attr('collapsed', o.collapsed);
+
+			// save state in cookie if allowed
+			if (o.cookie) {
+				self._cookie(Number(o.collapsed), o.cookie);
+			}
+
+			// inner toggle call to show only one unfolded panel if 'accordion' option is set
+			if (o.accordion && !innerCall){
+				$("."+o.accordion+"[role='panel'][collapsed='false'][id!='"+(o.id)+"']").panel('toggle', collapseSpeed, true);
+			}						
 
 			// css animation for header and button
 			btn.toggleClass(ibc).toggleClass(ib);
@@ -161,8 +202,13 @@
 				.removeClass(o.contentClass);
 			this.panelBox
 				.removeAttr('role')
+				.removeAttr('collapsed')
 				.unbind('.panel')
 				.removeClass(o.widgetClass);
+				
+			if (o.cookie) {
+				this._cookie(null, o.cookie);
+			}
 		},
 
 		_buttonHover: function(el){
@@ -176,15 +222,18 @@
 	});
 
 	$.extend($.ui.panel, {
-		version: '0.2.2',
+		version: '0.2.3',
 		defaults: {
 			event: 'click',
 			collapsible: true,
 			collapseType: 'default',
 			collapsed: false,
+			accordion: false,
 			collapseSpeed: 'fast',
 			// suppose that we need ui.toolbar with controls here
 			controls: false,
+			// store panel state in cookie (jQuery cookie Plugin needed - http://plugins.jquery.com/project/cookie)
+			cookie: null, // accepts cookie plugin options, e.g. { name: 'myPanel', expires: 7, path: '/', domain: 'jquery.com', secure: true }
 			// styling
 			widgetClass: 'ui-helper-reset ui-widget ui-panel',
 			headerClass: 'ui-helper-reset ui-widget-header ui-panel-header ui-corner-top',
