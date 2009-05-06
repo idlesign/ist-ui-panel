@@ -1,5 +1,5 @@
 /*
- * Panel Draft 0.2.3
+ * Panel Draft 0.2.3.1
  * for jQuery UI
  *
  * Copyright (c) 2009 idle sign
@@ -56,8 +56,11 @@
 
 					switch (o.collapseType) {
 						case 'slide-right':
+							var childIndex = 0;
+							// there is a shift of child element index if controls are enabled
+							if (o.controls) childIndex = 1;
 							this.rightBox.append('<span><span/></span>');
-							this.collapsePanel = this.rightBox.children().eq(1).addClass(o.collapsePnlClass);
+							this.collapsePanel = this.rightBox.children().eq(childIndex).addClass(o.collapsePnlClass);
 							this.collapseButton =  this.collapsePanel.children().eq(0).addClass(o.slideRIcon);
 							this.iconBtnClpsd = o.slideRIconClpsd;
 							this.iconBtn = o.slideRIcon;
@@ -222,7 +225,7 @@
 	});
 
 	$.extend($.ui.panel, {
-		version: '0.2.3',
+		version: '0.2.3.1',
 		defaults: {
 			event: 'click',
 			collapsible: true,
