@@ -1,8 +1,8 @@
 /*
- * Panel Draft 0.2.3.1
+ * Panel Draft 0.3
  * for jQuery UI
  *
- * Copyright (c) 2009 idle sign
+ * Copyright (c) 2009 Igor 'idle sign' Starikov
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -30,10 +30,12 @@
 				this.panelBox.hide();
 				this.headerBox = this.element.children().eq(0);
 				this.contentBox = this.element.children().eq(1);
+				o.content = this.contentBox.html();
 				this.headerBox.wrapInner('<div><span></span></div>');
 				// need separate titleBox and titleTextBox to avoid possible collapse/draggable issues
 				this.titleBox = this.headerBox.children().eq(0);
 				this.titleTextBox = this.titleBox.children().eq(0);
+				this.titleText = this.titleTextBox.html();
 				this.headerBox.prepend('<span></span>')
 				this.rightBox = this.headerBox.children().eq(0).addClass(o.rightboxClass);
 
@@ -140,15 +142,21 @@
 				contentBox = this.contentBox,
 				headerBox = this.headerBox,
 				titleTextBox = this.titleTextBox,
-				ctrlBox = this.ctrlBox;
+				titleText = this.titleText,
+				ctrlBox = this.ctrlBox,
+				ie = '';
+
+			// that's IE 6-8 for sure, use appropriate style for vertical text
+			if (!jQuery.support.leadingWhitespace) ie="-ie";
 
 			// split toggle into 'fold' and 'unfold' actions and handle callbacks
 			if (contentBox.css('display')=='none') this._trigger("unfold");
 			else this._trigger("fold");
 
 			if (ctrlBox) ctrlBox.toggle(0);
-			if (o.collapseType=='default'){
-				// different content sliding animation
+
+			// different content sliding animation
+			if (o.collapseType=='default'){				
 				if (collapseSpeed==0) {
 					if (ctrlBox) ctrlBox.hide();
 					contentBox.hide();
@@ -161,20 +169,39 @@
 					contentBox.hide();
 				} else contentBox.toggle();
 
-				// vertical text workaround - to be replaced with more clever in future
 				if (o.collapsed==false){
-					headerBox.attr('align','center');
-					titleTextBox.html(titleTextBox.text().replace(/(.)/g, '$1<BR>'));
+					if (o.trueVerticalText){
+						// true vertical text - svg or filter
+						headerBox.toggleClass('ui-panel-vtitle').css('height', o.vHeight);
+						if (ie=='')
+						titleTextBox.
+							empty().
+							append('<object type="image/svg+xml" data="data:image/svg+xml; charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'><text x=\'-190\' y=\'13\' style=\'font-weight:bold;font-family:verdana;font-size:0.7em;\' transform=\'rotate(-90)\' text-rendering=\'optimizeSpeed\'>'+titleText+'</text></svg>"></object>').
+							css('height', o.vHeight);
+						
+						titleTextBox.toggleClass('ui-panel-vtext'+ie);
+					} else {
+						// vertical text workaround
+						headerBox.attr('align','center');
+						titleTextBox.html(titleTextBox.text().replace(/(.)/g, '$1<BR>'));
+					}
 					panelBox.animate( {width: '2.4em'}, collapseSpeed );
 				} else {
-					headerBox.attr('align','left');
-					titleTextBox.html(titleTextBox.text().replace(/<BR>/g, ' '));
+					if (o.trueVerticalText){
+						headerBox.toggleClass('ui-panel-vtitle').css('height', 'auto');
+						titleTextBox.empty().append(titleText);
+						
+						titleTextBox.toggleClass('ui-panel-vtext'+ie);
+					} else {
+						headerBox.attr('align','left');
+						titleTextBox.html(titleTextBox.text().replace(/<BR>/g, ' '));
+					}
 					panelBox.animate( {width: o.width}, collapseSpeed );
 				}
 			}
 
 			// only if not initially folded
-			if (collapseSpeed!=0) {
+			if (collapseSpeed!=0 || o.trueVerticalText) {
 				o.collapsed = !o.collapsed;
 			}
 
@@ -195,14 +222,19 @@
 			headerBox.toggleClass('ui-corner-all');
 		},
 
+		content: function(content){
+			this.contentBox.html(content);
+		},
+
 		destroy: function(){
 			var o = this.options;
 
 			this.headerBox
-				.html(this.titleTextBox.html())
+				.html(this.titleText)
 				.removeClass(o.headerClass);
 			this.contentBox
-				.removeClass(o.contentClass);
+				.removeClass(o.contentClass)
+				.html(o.content);
 			this.panelBox
 				.removeAttr('role')
 				.removeAttr('collapsed')
@@ -225,7 +257,7 @@
 	});
 
 	$.extend($.ui.panel, {
-		version: '0.2.3.1',
+		version: '0.3',
 		defaults: {
 			event: 'click',
 			collapsible: true,
@@ -233,6 +265,10 @@
 			collapsed: false,
 			accordion: false,
 			collapseSpeed: 'fast',
+			// true vertical text with svg or filter rendering
+			trueVerticalText: false,
+			// neccessary for true vertical text
+			vHeight: '220px',
 			// suppose that we need ui.toolbar with controls here
 			controls: false,
 			// store panel state in cookie (jQuery cookie Plugin needed - http://plugins.jquery.com/project/cookie)

@@ -11,3 +11,6 @@
 .ui-panel-controls { float:left; margin: 0.2em 0.7em 0 0;}
 .ui-panel-content { padding:0.7em 0.4em 0.7em 0.4em; }
 .ui-panel-clps-pnl { position:relative; top:-0.1em; float:left; padding:0.1em 0.25em 0.3em 0.25em; }
+.ui-panel-vtitle { overflow:hidden; position:relative; white-space:nowrap; }
+.ui-panel-vtext { display:block; }
+.ui-panel-vtext-ie { filter:flipv() fliph(); writing-mode:tb-rl; position:absolute; left:0.2em; bottom:1.5em; }
