@@ -1,5 +1,5 @@
 /*
- * Panel Draft 0.3
+ * Panel Draft 0.3.1
  * for jQuery UI
  *
  * Copyright (c) 2009 Igor 'idle sign' Starikov
@@ -24,13 +24,14 @@
 
 				this.panelBox = this.element;
 				o.width = this.panelBox.css('width');
-				this.panelBox.attr('role', 'panel')
-				o.id = this.panelBox.attr('id')
-				// prevent blinking
-				this.panelBox.hide();
+				this.panelBox.attr('role', 'panel');
+				o.id = this.panelBox.attr('id');
 				this.headerBox = this.element.children().eq(0);
 				this.contentBox = this.element.children().eq(1);
 				o.content = this.contentBox.html();
+				// wrap content to prevent padding issue
+				this.contentBox.wrapInner('<div></div>');
+				this.contentTextBox = this.contentBox.children().eq(0).addClass(o.contentTextClass);
 				this.headerBox.wrapInner('<div><span></span></div>');
 				// need separate titleBox and titleTextBox to avoid possible collapse/draggable issues
 				this.titleBox = this.headerBox.children().eq(0);
@@ -91,12 +92,10 @@
 						this.collapseButton.bind((o.event) + ".panel", function(event) { return self._clickHandler.call(self, event, this); });
 						this.titleTextBox.bind((o.event) + ".panel", function(event) { return self._clickHandler.call(self, event, this); });
 					}
-
 					// collapse panel if 'accordion' option is set
 					if (o.accordion) {
 						o.collapsed = true;
 					}
-
 					// restore state from cookie
 					if (o.cookie) {
 						if (self._cookie()==0) {
@@ -105,14 +104,13 @@
 							o.collapsed = true;
 						}
 					}
-
+					// store state as attribute
 					this.panelBox.attr('collapsed', o.collapsed);
-
+					
 					// panel collapsed - trigger action
 					if (o.collapsed) {
 						self.toggle(0, true);
 					}
-
 				}
 				this.panelBox.show();
 			}
@@ -155,7 +153,7 @@
 
 			if (ctrlBox) ctrlBox.toggle(0);
 
-			// different content sliding animation
+			// vaious content sliding animations
 			if (o.collapseType=='default'){				
 				if (collapseSpeed==0) {
 					if (ctrlBox) ctrlBox.hide();
@@ -173,11 +171,13 @@
 					if (o.trueVerticalText){
 						// true vertical text - svg or filter
 						headerBox.toggleClass('ui-panel-vtitle').css('height', o.vHeight);
-						if (ie=='')
-						titleTextBox.
-							empty().
-							append('<object type="image/svg+xml" data="data:image/svg+xml; charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'><text x=\'-190\' y=\'13\' style=\'font-weight:bold;font-family:verdana;font-size:0.7em;\' transform=\'rotate(-90)\' text-rendering=\'optimizeSpeed\'>'+titleText+'</text></svg>"></object>').
-							css('height', o.vHeight);
+						if (ie==''){
+							titleTextBox.
+								empty().
+								// put transparent div over svg object for object onClick simulation
+								append('<div style="height:90%;width:100%;position:absolute;bottom:0;"></div><object type="image/svg+xml" data="data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'><text x=\'-190\' y=\'13\' style=\'font-weight:bold;font-family:verdana;font-size:0.7em;\' transform=\'rotate(-90)\' text-rendering=\'optimizeSpeed\'>'+titleText+'</text></svg>"></object>').
+								css('height', o.vHeight);
+						}
 						
 						titleTextBox.toggleClass('ui-panel-vtext'+ie);
 					} else {
@@ -257,7 +257,7 @@
 	});
 
 	$.extend($.ui.panel, {
-		version: '0.3',
+		version: '0.3.1',
 		defaults: {
 			event: 'click',
 			collapsible: true,
@@ -277,6 +277,7 @@
 			widgetClass: 'ui-helper-reset ui-widget ui-panel',
 			headerClass: 'ui-helper-reset ui-widget-header ui-panel-header ui-corner-top',
 			contentClass: 'ui-helper-reset ui-widget-content ui-panel-content ui-corner-bottom',
+			contentTextClass: 'ui-panel-content-text',
 			rightboxClass: 'ui-panel-rightbox',
 			controlsClass: 'ui-panel-controls',
 			titleClass: 'ui-panel-title',
