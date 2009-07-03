@@ -1,5 +1,5 @@
 /*
-* Panel Draft 0.3.2
+* Panel Draft 0.3.3
 * for jQuery UI
 *
 * Copyright (c) 2009 Igor 'idle sign' Starikov
@@ -100,8 +100,8 @@
 			    o.collapsed = true;
 			}
 		    }
-		    // store state as attribute
-		    this.panelBox.attr('collapsed', o.collapsed);
+		    // store state as data
+		    this.panelBox.data('collapsed', o.collapsed);
 
 		    // panel collapsed - trigger action
 		    if (o.collapsed) {
@@ -219,7 +219,7 @@
 		o.collapsed = !o.collapsed;
 	    }
 
-	    panelBox.attr('collapsed', o.collapsed);
+	    panelBox.data('collapsed', o.collapsed);
 
 	    // save state in cookie if allowed
 	    if (o.cookie) {
@@ -228,7 +228,7 @@
 
 	    // inner toggle call to show only one unfolded panel if 'accordion' option is set
 	    if (o.accordion && !innerCall){
-		$("."+o.accordion+"[role='panel'][collapsed='false'][id!='"+(o.id)+"']").panel('toggle', collapseSpeed, true);
+		$("."+o.accordion+"[role='panel'][id!='"+(o.id)+"']:not(:data(collapsed))").panel('toggle', collapseSpeed, true);
 	    }
 
 	    // css animation for header and button
@@ -251,7 +251,7 @@
 		.html(o.content);
 	    this.panelBox
 		.removeAttr('role')
-		.removeAttr('collapsed')
+		.removeData('collapsed')
 		.unbind('.panel')
 		.removeClass(o.widgetClass);
 
@@ -269,7 +269,7 @@
     });
 
     $.extend($.ui.panel, {
-	version: '0.3.2',
+	version: '0.3.3',
 	defaults: {
 	    event: 'click',
 	    collapsible: true,
