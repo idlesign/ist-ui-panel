@@ -1,5 +1,5 @@
 /*
-* Panel Draft 0.3.3
+* Panel Draft 0.3.4
 * for jQuery UI
 *
 * Copyright (c) 2009 Igor 'idle sign' Starikov
@@ -44,6 +44,8 @@
 		    // suppose 'o.controls' should be a ui.toolbar control
 		    this.rightBox.append('<span></span>');
 		    this.controlsBox = this.rightBox.children().eq(0).addClass(o.controlsClass).html(o.controls);
+		} else {
+		    this.controlsBox = null;
 		}
 
 		// styling
@@ -112,6 +114,9 @@
 		if (!o.accordion && o.draggable && $.fn.draggable){ this._makeDraggable(); }
 
 		this.panelBox.show();
+
+		// disabled panel handling
+		this.disable(o.disabled);
 	    }
 	},
 
@@ -136,6 +141,26 @@
 	    if (o.disabled) { return false; }
 	    this.toggle(o.collapseSpeed);
 	    return false;
+	},
+
+	disable: function (disable){
+	    var o = this.options;
+
+	    if (disable===undefined) disable = true;
+	    if (disable) {
+		this.panelBox.children().addClass(o.disableClass);
+		// lock panel controls
+		if (this.controlsBox){
+		    this.controlsBox.bind('click', function() { return false; });
+		}
+	    } else {
+		this.panelBox.children().removeClass(o.disableClass);
+		if (this.controlsBox){
+		    this.controlsBox.unbind('click');
+		}
+	    }
+	    // save state
+	    o.disabled = disable;
 	},
 
 	toggle: function (collapseSpeed, innerCall){
@@ -269,7 +294,7 @@
     });
 
     $.extend($.ui.panel, {
-	version: '0.3.3',
+	version: '0.3.4',
 	defaults: {
 	    event: 'click',
 	    collapsible: true,
@@ -278,6 +303,7 @@
 	    accordion: false,
 	    collapseSpeed: 'fast',
 	    draggable: false,
+	    disabled: false,
 	    // true vertical text with svg or filter rendering
 	    trueVerticalText: false,
 	    // neccessary for true vertical text
@@ -297,6 +323,7 @@
 	    titleTextClass: 'ui-panel-title-text',
 	    iconClass: 'ui-icon',
 	    hoverClass: 'ui-state-hover',
+	    disableClass: 'ui-state-disabled',
 	    collapsePnlClass: 'ui-panel-clps-pnl',
 	    //icons
 	    headerIconClpsd: 'ui-icon-triangle-1-e',
