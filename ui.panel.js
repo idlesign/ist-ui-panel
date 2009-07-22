@@ -1,5 +1,5 @@
 /*
-* Panel Draft 0.3.4
+* Panel Draft 0.3.4.1
 * for jQuery UI
 *
 * Copyright (c) 2009 Igor 'idle sign' Starikov
@@ -121,7 +121,7 @@
 	},
 
 	_cookie: function() {
-	    var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-panel-' + $.data(this.options.id));
+	    var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-panel-'+this.options.id);
 	    return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
 
@@ -294,7 +294,7 @@
     });
 
     $.extend($.ui.panel, {
-	version: '0.3.4',
+	version: '0.3.4.1',
 	defaults: {
 	    event: 'click',
 	    collapsible: true,
