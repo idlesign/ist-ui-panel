@@ -1,5 +1,5 @@
 /*
-* Panel Draft 0.3.4.1
+* Panel Draft 0.3.5
 * for jQuery UI
 *
 * Copyright (c) 2009 Igor 'idle sign' Starikov
@@ -109,6 +109,8 @@
 		    if (o.collapsed) {
 			self.toggle(0, true);
 		    }
+		} else {
+			this.titleTextBox.css('cursor','default');
 		}
 		// making panel draggable if not accordion-like
 		if (!o.accordion && o.draggable && $.fn.draggable){ this._makeDraggable(); }
@@ -125,6 +127,7 @@
 	    return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
 
+	// ui.draggable config
 	_makeDraggable: function() {
 	    this.panelBox.draggable({
 		containment: 'document',
@@ -143,6 +146,7 @@
 	    return false;
 	},
 
+	// disables panel (usign appropiate ui class)
 	disable: function (disable){
 	    var o = this.options;
 
@@ -163,6 +167,7 @@
 	    o.disabled = disable;
 	},
 
+	// toggles panel state (folded/unfolded)
 	toggle: function (collapseSpeed, innerCall){
 	    var self = this,
 		o = this.options,
@@ -261,10 +266,12 @@
 	    headerBox.toggleClass('ui-corner-all');
 	},
 
+	// sets panel's content
 	content: function(content){
 	    this.contentTextBox.html(content);
 	},
 
+	// destroys panel
 	destroy: function(){
 	    var o = this.options;
 
@@ -294,7 +301,7 @@
     });
 
     $.extend($.ui.panel, {
-	version: '0.3.4.1',
+	version: '0.3.5',
 	defaults: {
 	    event: 'click',
 	    collapsible: true,
