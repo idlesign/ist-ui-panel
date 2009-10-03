@@ -1,5 +1,5 @@
 /*
-* Panel Draft 0.3.5
+* Panel Draft 0.3.6
 * for jQuery UI
 *
 * Copyright (c) 2009 Igor 'idle sign' Starikov
@@ -10,7 +10,6 @@
 *
 * Depends:
 *	ui.core.js
-*	ui.draggable.js
 */
 (function($) {
 
@@ -220,7 +219,7 @@
 			    titleTextBox
 				.empty()
 				// put transparent div over svg object for object onClick simulation
-				.append('<div style="height:90%;width:100%;position:absolute;bottom:0;"></div><object type="image/svg+xml" data="data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'><text x=\'-190\' y=\'13\' style=\'font-weight:'+titleTextBox.css('font-weight')+';font-family:'+titleTextBox.css('font-family')+';font-size:'+titleTextBox.css('font-size')+';fill:'+titleTextBox.css('color')+';\' transform=\'rotate(-90)\' text-rendering=\'optimizeSpeed\'>'+titleText+'</text></svg>"></object>')
+				.append('<div style="height:90%;width:100%;position:absolute;bottom:0;"></div><object type="image/svg+xml" data="data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'><text x=\'-190\' y=\'13\' style=\'font-weight:'+titleTextBox.css('font-weight')+';font-family:'+titleTextBox.css('font-family').replace(/"/g, '')+';font-size:'+titleTextBox.css('font-size')+';fill:'+titleTextBox.css('color')+';\' transform=\'rotate(-90)\' text-rendering=\'optimizeSpeed\'>'+titleText+'</text></svg>"></object>')
 				.css('height', o.vHeight);
 			}
 
@@ -301,7 +300,7 @@
     });
 
     $.extend($.ui.panel, {
-	version: '0.3.5',
+	version: '0.3.6',
 	defaults: {
 	    event: 'click',
 	    collapsible: true,
