@@ -1,0 +1,296 @@
+<!doctype html>
+<head>
+	<title>jQuery UI - Draft Content grouping / Panel Advanced Demo</title>
+	<script type="text/javascript" src="jquery-1.4.1.min.js"></script>
+	
+	<script type="text/javascript" src="jquery-ui-1.7.custom.min.js"></script>
+	<link type="text/css" href="jquery-ui-1.7.custom.css" rel="stylesheet" />
+
+	<script type="text/javascript" src="ui.panel.min.js"></script>
+	<link type="text/css" href="ui.panel.css" rel="stylesheet" />
+
+	<script type="text/javascript" src="jquery.cookie.js"></script>
+
+	<style>
+		html, body{
+		    font-size: 10px;
+		    font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+		    padding:0;
+		    margin:0;
+		}
+		.box { margin: 1em }
+		.navPanel { margin: 0 0.5em 0.5em 0.5em; }
+                .centralPanel { margin-bottom: 1em; }
+                .fakeLink{ color:navy; cursor:pointer; }
+		#desktop { background-color:#eee; padding:1.5em; padding-bottom:3em; color:#444; }
+		#container{
+		    margin:0; padding:0;
+		}
+		#lCenter{
+		    padding:1em;
+		    padding-top:0;
+		    overflow:hidden;
+		}
+		#lLeft{
+		    float: left;
+		}
+		#lRight{
+		    float: right;
+		}
+	</style>
+
+	<script type="text/javascript">
+	    $(document).ready(
+		function(){
+		    $('#panelLeft_1').panel({
+                        collapseType:'slide-left',
+                        width:'300px'
+                    });
+		    $('#panelLeft_2').panel({
+                        collapseType:'slide-left',
+                        trueVerticalText:true,
+                        vHeight:'150px',
+                        width:'280px'
+                    });
+		    $('#panelLeft_3').panel({
+                        collapseType:'slide-left',
+                        trueVerticalText:true,
+                        vHeight:'150px',
+                        width:'300px'
+                    });
+		    $('#panelRight_1').panel({
+                        collapseType:'slide-right',
+                        collapsed:true,
+                        trueVerticalText:true,
+                        vHeight:'237px',
+                        width:'200px'
+                    });
+		    $('#panelRight_2').panel({
+                        collapseType:'slide-right',
+                        collapsed:true,
+                        trueVerticalText:true,
+                        vHeight:'160px',
+                        width:'200px'
+                    });
+		    $('#panelCenter_1').panel({
+                        collapsible:false
+                    });
+                    $('#panelCenter_2').panel({
+                        draggable:true,
+                        cookie:{'expires':7}
+                    });
+                    $('#panelCenter_3_1, #panelCenter_3_2, #panelCenter_3_3').panel({
+                        accordion:'my_group'
+                    });
+                    $('#panelCenter_4').panel({
+                        controls:$('#cntrl').html(),
+                        collapseSpeed:1000,
+                        fold: function() { alert(' "fold" callback executed '); },
+                        unfold: function() { alert(' "unfold" callback executed '); }
+                    });
+		}
+	    );
+	</script>
+	<script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script> 
+	<script type="text/javascript"> $(function(){ $('<div/>').prependTo('#lCenter').themeswitcher(); }); </script>
+</head>
+<body>
+
+<div class="box">
+    <p>
+	This is jQuery UI Draft <b>Content grouping / Panel</b> advanced demonstration.<br/>
+        Latest source at <a href="http://code.google.com/p/ist-ui-panel/">http://code.google.com/p/ist-ui-panel/</a>, also available at jQuery UI Labs: <a href="http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel/">http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel</a><br/>
+        Old simple demo (without IE layout issues) is <a href="demo_simple.htm">here</a>.
+    </p>
+</div>
+
+<div id="container">  
+    <div id="lLeft">
+	<div id="panelLeft_1" class="navPanel">
+	    <h3>Left panel #1</h3>
+	    <div>
+		Panel's initial options:
+                <ul>
+                    <li>collapseType = slide-left</li>
+                    <li>width = 300px</li>
+                </ul>
+                <b>Notes:</b>
+                <ul>
+                    <li>'slide-left' & 'slide-right' panels automatically create so-called stack area, where all these panels are stacked in collapsed state. This could be overriden with 'stackable' option set to 'false'.</li>
+                </ul>
+	    </div>
+	</div>
+	<div id="panelLeft_2" class="navPanel">
+	    <h3>Left panel #2</h3>
+	    <div>
+		Panel's initial options:
+                <ul>
+                    <li>collapseType = slide-left</li>
+                    <li>trueVerticalText = true</li>
+                    <li>vHeight = 150px</li>
+                    <li>width = 280px</li>
+                </ul>
+                <b>Notes:</b>
+                <ul>
+                    <li>'trueVerticalText' option forces collapsed panel's title to be rendered vertically (i.e. rotated, read from bottom to top) in contrast with 'Left panel #1'.</li>
+                    <li>'vHeight' option set to '150px' restricts panel's high in folded state.</li>
+                    <li>Panels width is set to '280px', so when unfolded it's slightly narrower than 'Left panel #1' and 'Left panel #3'.</li>
+                </ul>
+	    </div>
+	</div>
+	<div id="panelLeft_3" class="navPanel">
+	    <h3>Left panel #3</h3>
+	    <div>
+		Panel's initial options:
+                <ul>
+                    <li>collapseType = slide-left</li>
+                    <li>trueVerticalText = true</li>
+                    <li>vHeight = 150px</li>
+                    <li>width = 300px</li>
+                </ul>
+	    </div>
+	</div>
+    </div>
+    <div id="lRight">
+	<div id="panelRight_1" class="navPanel">
+	    <h3>Right panel #1</h3>
+	    <div>
+		Panel's initial options:
+                <ul>
+                    <li>collapseType = slide-right</li>
+                    <li>collapsed = true</li>
+                    <li>trueVerticalText = true</li>
+                    <li>vHeight = 237px</li>
+                    <li>width = 200px</li>
+                </ul>
+                <b>Notes:</b>
+                <ul>
+                    <li>'collapsed' option set to 'true' tells panel to be initially rendered in collapsed state.</li>
+                </ul>
+	    </div>
+	</div>
+	<div id="panelRight_2" class="navPanel">
+	    <h3>Right panel #2</h3>
+	    <div>
+		Panel's initial options:
+                <ul>
+                    <li>collapseType = slide-right</li>
+                    <li>collapsed = true</li>
+                    <li>trueVerticalText = true</li>
+                    <li>vHeight = 160px</li>
+                    <li>width = 200px</li>
+                </ul>
+	    </div>
+	</div>
+    </div>
+    <div id="lCenter">
+	<div id="desktop">
+	    <p>
+		<b>Feel free to examine html of this page.</b>
+	    </p>
+	    <div id="panelCenter_1" class="centralPanel">
+		<h3>Central panel #1</h3>
+		<div>
+                    Panel's initial options:
+                    <ul>
+                        <li>collapsible = false</li>
+                    </ul>
+                    <b>Notes:</b>
+                    <ul>
+                        <li>'collapsible' option set to 'false' allows us to create static non-collapsible panel.</li>
+                    </ul>
+		</div>
+	    </div>
+
+            <div style="width:40%;float:left;">
+                <div id="panelCenter_2" class="centralPanel">
+                    <h3>Central panel #2</h3>
+                    <div>
+                        Panel's initial options:
+                        <ul>
+                            <li>draggable = true</li>
+                            <li>cookie = {'expires':7}</li>
+                        </ul>
+                        <b>Notes:</b>
+                        <ul>
+                            <li>If 'draggable' option is set to 'true' panel uses jQuery UI Draggable plugin and could be dragged by title. Draggable panel overlaps other non-draggable panels.</li>
+                            <li>If 'cookie' option is not 'false' panel uses jQuery Cookie plugin to store panel state between sessions. 'cookie' option accepts the same parameters as Cookie plugin (in the example we store cookie for 7 days).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="padding:1.5em;overflow:hidden;">
+                <div style="margin-left:1em;">
+                    Only one of these accordion-like panels below is opened at a time.<br/>
+                    <b>Note:</b> 'accordion' option is set to work with 'my_group' classed controls.
+                </div>
+                <div class="box">
+                    <div id="panelCenter_3_1" class="panel my_group">
+                        <h3>Central panel #3 (accordion-like #1)</h3>
+                        <div>
+                            Just me and you, pal. Just me and you.<br/><br/>
+                            Panel's initial options:
+                            <ul>
+                                <li>accordion = 'my_group'</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="panelCenter_3_2" class="panel my_group">
+                        <h3>Central panel #3 (accordion-like #2)</h3>
+                        <div>
+                            Just me and you, pal. Just me and you.<br/><br/>
+                            Panel's initial options:
+                            <ul>
+                                <li>accordion = 'my_group'</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="panelCenter_3_3" class="panel my_group">
+                        <h3>Central panel #3 (accordion-like #3)</h3>
+                        <div>
+                            Just me and you, pal. Just me and you.<br/><br/>
+                            Panel's initial options:
+                            <ul>
+                                <li>accordion = 'my_group'</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="clear:both"></div>
+            
+	    <div id="panelCenter_4" class="centralPanel">
+		<h3>Central panel #4</h3>
+		<div>
+                    Panel's initial options:
+                    <ul>
+                        <li>controls = $('#cntrl').html()</li>
+                        <li>collapseSpeed = 1000</li>
+                        <li>fold = function() { alert(' "fold" callback executed '); }</li>
+                        <li>unfold = function() { alert(' "unfold" callback executed '); }</li>
+                    </ul>
+                    <b>Notes:</b>
+                    <ul>
+                        <li>'controls' option allows to place custom content at the right corner of unfolded panel's titlebar (in this example we place there 'Edit' link from hidden div with id=cntrl, examine page source).</li>
+                        <li>'collapseSpeed' option helps to ajust the duration of folding/unfolding animation (here animation time set to 1000ms).</li>
+                        <li>Functions assigned to 'fold' & 'unfold' actions are called callbacks and are executed when the appropiate action took place.</li>
+                    </ul>
+                    <b>And more:</b>
+                    <ul>
+                        <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('disable', true);$('#pan_enable').show()">disable this panel</span> using .panel('disable', true).</li>
+                        <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('content', 'New content ;)');">replace this content </span> using .panel('content', 'New content ;)').</li>
+                        <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('destroy');">destroy this panel </span> using .panel('destroy'). Initial panel content would be restored.</li>
+                    </ul>
+		</div>
+	    </div>
+            <div id="pan_enable" style="display:none;color:navy;cursor:pointer;" onClick="$('#panelCenter_4').panel('disable', false);$(this).hide();">Enable panel above using .panel('disable', false).</div>
+
+	</div>
+    </div>
+</div>
+<div id="cntrl" style="display:none"><a style="font-size:10px;color:blue;" href="#">Edit</a></div>
+</body>
+</html>

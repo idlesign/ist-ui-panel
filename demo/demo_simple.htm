@@ -1,0 +1,173 @@
+<!doctype html>
+<head>
+	<title>jQuery UI - Draft Panel Old Simple Demo</title>
+	<script type="text/javascript" src="jquery-1.4.1.min.js"></script>
+	
+	<script type="text/javascript" src="jquery-ui-1.7.custom.min.js"></script>
+	<link type="text/css" href="jquery-ui-1.7.custom.css" rel="stylesheet" />
+
+	<script type="text/javascript" src="ui.panel.min.js"></script>
+	<link type="text/css" href="ui.panel.css" rel="stylesheet" />
+
+	<script type="text/javascript" src="jquery.cookie.js"></script>
+
+	<style>
+		body { font-size: 62.5%; font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif"; }
+		.box { margin-top:2em; }
+	</style>
+
+	<script type="text/javascript">
+		$(document).ready(
+			function(){
+				$('#panel1').panel({
+					'collapseType':'slide-right',
+                                        'stackable':false,
+					'controls':$('#cntrl').html()
+				});
+
+				$('#panel9').panel({
+					'collapseType':'slide-right',
+                                        'stackable':false,
+					'trueVerticalText':true
+				});
+
+				$('#panel3').panel({
+					'collapseType':'slide-left',
+                                        'stackable':false,
+					'collapseSpeed':1000,
+					unfold: function() { alert(' \'unfold\' callback executed '); },
+					fold: function() { alert(' \'fold\' callback executed '); }
+				});
+
+				$('#panel2').panel({
+					'collapsed':true,
+					'draggable':true
+				});
+
+				$('#panel4').panel({
+					'controls':$('#cntrl').html(),
+					'collapsible':false
+				});
+
+				$('#panel5').panel({
+					'cookie':{'expires':7}
+				});
+
+				$('#panel6, #panel7, #panel8').panel({
+					'accordion':'my_group'
+				});
+
+			}
+		);
+	</script>
+	<script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script> 
+	<script type="text/javascript"> $(function(){ $('<div/>').appendTo('#demo-description').themeswitcher(); }); </script>
+</head>
+<body>
+
+<div id="demo-description">
+	<p>
+		This is jQuery UI Draft <b>Content grouping / Panel</b> old simple demonstration.<br/>
+		Latest source at <a href="http://code.google.com/p/ist-ui-panel/">http://code.google.com/p/ist-ui-panel/</a>, also available at jQuery UI Labs: <a href="http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel/">http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel</a><br/>
+                Advanced demo (though with IE layout issues) is <a href="demo.htm">here</a>.
+	</p>
+</div>
+
+<div class="demo">
+
+	<div class="box">
+		<div id="panel4" class="panel" style="width:32%;">
+			<h3>Simple panel example</h3>
+			<div>
+				This is a simple panel example width collapsibility turned off.<br/>
+				<b>Note:</b> This panel uses controls from 'cntrl' hidden div (that is 'Edit' text).<br/>
+				<div style="margin:.5em 0 0 1em;color:navy;cursor:pointer;" onClick="$('#panel4').panel('content', $('#fake_container').html());">Change this content.</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="box">
+		<div id="panel2" class="panel" style="width:32%;">
+			<h3>Default collapsible panel example</h3>
+			<div>
+				This is a default collapsible panel initially collapsed.<br/>
+				<b>Note:</b> It's draggable (needs jQuery UI Draggable Plugin).
+			</div>
+		</div>
+	</div>
+
+
+	<div class="box">
+		<div id="panel5" class="panel" style="width:25%;">
+			<h3>Panel state in a cookie</h3>
+			<div>
+				The state of this panel is stored in a cookie.<br/>
+				<b>Note:</b> Needs jQuery cookie Plugin &#8211; <a href="http://plugins.jquery.com/project/cookie">http://plugins.jquery.com/project/cookie</a>
+			</div>
+		</div>
+	</div>
+
+	<div align="right" style="width:50%">
+		<div class="box">
+			<div id="panel1" class="panel" style="width:80%;">
+				<h3>Slide right example #1</h3>
+				<div>Slide right panel <i>example</i> with controls from 'cntrl' hidden div.<br/>
+				    <br/>You can <span style="color:navy;cursor:pointer;" onClick="$('#panel1').panel('disable', true);$('#pan_enable').show()">disable this panel</span>.</div>
+			</div>
+		</div>
+		<div id="pan_enable" style="display:none;color:navy;cursor:pointer;" onClick="$('#panel1').panel('disable', false);$(this).hide();">Enable panel above.</div>
+
+		<div class="box">
+			<div id="panel9" class="panel" style="width:80%;">
+				<h3>Slide right example #2</h3>
+				<div>Slide right panel example with true vertical text.</div>
+			</div>
+		</div>
+	</div>
+	<div class="box">
+		<div id="panel3" class="panel" style="width:45%;">
+			<h3>Slide left example</h3>
+			<div>
+				This panel slides to the left. Collapse speed set to 1000.<br/>
+				It also has 'fold' and 'unfold' callback functions defined.
+			</div>
+		</div>
+	</div>
+
+	<div style="padding:1.5em;border:solid 2px #eee;margin:2%;width:20%;">
+		<div  class="demo-description">
+			Only one of these accordion-like panels is opened at a time.
+			<b>Note:</b> 'accordion' option is set to work with 'my_group' classed controls.
+		</div>
+		<div class="box">
+			<div id="panel6" class="panel my_group">
+				<h3>Panel accordion-like #1</h3>
+				<div>
+					Just me and you, pal. Just me and you.
+				</div>
+			</div>
+			<div id="panel7" class="panel my_group">
+				<h3>Panel accordion-like #2</h3>
+				<div>
+					Just me and you, pal. Just me and you.
+				</div>
+			</div>
+			<div id="panel8" class="panel my_group">
+				<h3>Panel accordion-like #3</h3>
+				<div>
+					Just me and you, pal. Just me and you.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="cntrl" style="display:none"><a style="font-size:10px;color:blue;" href="#">Edit</a></div>
+	<div id="fake_container" style="display:none;font-size:0.6em">
+		Panel's content was replaced with hidden 'fake_container' div using <b>'content'</b> method.<br/>
+		If you <span style="color:navy;cursor:pointer;" onClick="$('#panel4').panel('destroy');">destroy this panel</span> initial content would be restored.
+	</div>
+
+</div>
+
+</body>
+</html>
