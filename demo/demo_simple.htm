@@ -1,10 +1,10 @@
 <!doctype html>
 <head>
 	<title>jQuery UI - Draft Panel Old Simple Demo</title>
-	<script type="text/javascript" src="jquery-1.4.1.min.js"></script>
+	<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 	
-	<script type="text/javascript" src="jquery-ui-1.7.custom.min.js"></script>
-	<link type="text/css" href="jquery-ui-1.7.custom.css" rel="stylesheet" />
+	<script type="text/javascript" src="jquery-ui-1.8.custom.min.js"></script>
+	<link type="text/css" href="jquery-ui-1.8.custom.css" rel="stylesheet" />
 
 	<script type="text/javascript" src="ui.panel.min.js"></script>
 	<link type="text/css" href="ui.panel.css" rel="stylesheet" />
@@ -68,7 +68,7 @@
 <div id="demo-description">
 	<p>
 		This is jQuery UI Draft <b>Content grouping / Panel</b> old simple demonstration.<br/>
-		Latest source at <a href="http://code.google.com/p/ist-ui-panel/">http://code.google.com/p/ist-ui-panel/</a>, also available at jQuery UI Labs: <a href="http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel/">http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel</a><br/>
+		Latest source at <a href="http://github.com/idlesign/ist-ui-panel/">http://github.com/idlesign/ist-ui-panel/</a>, also available at jQuery UI Labs: <a href="http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel/">http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel</a><br/>
                 Advanced demo (though with IE layout issues) is <a href="demo.htm">here</a>.
 	</p>
 </div>
@@ -112,10 +112,10 @@
 			<div id="panel1" class="panel" style="width:80%;">
 				<h3>Slide right example #1</h3>
 				<div>Slide right panel <i>example</i> with controls from 'cntrl' hidden div.<br/>
-				    <br/>You can <span style="color:navy;cursor:pointer;" onClick="$('#panel1').panel('disable', true);$('#pan_enable').show()">disable this panel</span>.</div>
+				    <br/>You can <span style="color:navy;cursor:pointer;" onClick="$('#panel1').panel('disable');$('#pan_enable').show()">disable this panel</span>.</div>
 			</div>
 		</div>
-		<div id="pan_enable" style="display:none;color:navy;cursor:pointer;" onClick="$('#panel1').panel('disable', false);$(this).hide();">Enable panel above.</div>
+		<div id="pan_enable" style="display:none;color:navy;cursor:pointer;" onClick="$('#panel1').panel('enable');$(this).hide();">Enable panel above.</div>
 
 		<div class="box">
 			<div id="panel9" class="panel" style="width:80%;">

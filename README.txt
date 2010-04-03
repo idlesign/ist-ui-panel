@@ -18,6 +18,12 @@ http://jqueryui.pbworks.com/ContentGrouping
 ==========
 Changelog:
 
+0.6
+	* changed: refactored to jQuery UI 1.8 (also removed 'disable' method now implemented in jquery.ui.widget.js)
+	* fixed: issue #1 on github: panel state not restored from cookie data
+	* fixed: issue #2 on github: unnecessary styling of destroyed panels
+	* fixed: issue #3 on github: error on stackable panel destroy
+
 0.5
 	* changed: refactored to jQuery 1.4
 	* changed: 'trueVerticalText' parameter now defaults to 'true'
@@ -31,8 +37,7 @@ Changelog:
 	* changed: source code reformatted (tabs converted to spaces)
 
 0.3.6
-	* fixed: issue #4 (true vertical text is not rendered in Opera - svg generation failed  
-when font-family css property contained quotes)
+	* fixed: issue #4 (true vertical text is not rendered in Opera - svg generation failed when font-family css property contained quotes)
 
 0.3.5
 	* fixed: 'pointer' cursor over panel title on non-collapsible panels (changed to 'default')

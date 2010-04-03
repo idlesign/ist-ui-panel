@@ -1,23 +1,74 @@
 /**
  * Panel / Content Grouping Draft for jQuery UI
  * ist-ui-panel
- * version 0.5
+ * version 0.6
  *
  * Copyright (c) 2009-2010 Igor 'idle sign' Starikov
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * http://code.google.com/p/ist-ui-panel/
+ * http://github.com/idlesign/ist-ui-panel
  *
  * Depends:
- *   jquery.ui.core.js
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
  */
 (function($) {
 
     $.widget('ui.panel', {
 
-        // create panel
+        options: {
+            event: 'click',
+            collapsible: true,
+            collapseType: 'default',
+            collapsed: false,
+            accordion: false,
+            collapseSpeed: 'fast',
+            draggable: false,
+
+            // ----------
+            // options for 'slide-left' & 'slide-right' collapseType panels only
+                // true vertical text with svg or filter rendering
+                trueVerticalText: true,
+                // collapsed panel height, neccessary for true vertical text
+                vHeight: '220px',
+                // automatically create special stack area (navigation window emulation)
+                stackable: true,
+            // ----------
+            // panel width
+            width: 'auto',
+            // suppose that we need ui.toolbar with controls here
+            controls: false,
+            // store panel state in cookie (jQuery cookie Plugin needed - http://plugins.jquery.com/project/cookie)
+            cookie: null, // accepts cookie plugin options, e.g. { name: 'myPanel', expires: 7, path: '/', domain: 'jquery.com', secure: true }
+
+            // styling
+            widgetClass: 'ui-helper-reset ui-widget ui-panel',
+            headerClass: 'ui-helper-reset ui-widget-header ui-panel-header ui-corner-top',
+            contentClass: 'ui-helper-reset ui-widget-content ui-panel-content ui-corner-bottom',
+            contentTextClass: 'ui-panel-content-text',
+            rightboxClass: 'ui-panel-rightbox',
+            controlsClass: 'ui-panel-controls',
+            titleClass: 'ui-panel-title',
+            titleTextClass: 'ui-panel-title-text',
+            iconClass: 'ui-icon',
+            hoverClass: 'ui-state-hover',
+            collapsePnlClass: 'ui-panel-clps-pnl',
+            //icons
+            headerIconClpsd: 'ui-icon-triangle-1-e',
+            headerIcon: 'ui-icon-triangle-1-s',
+            slideRIconClpsd: 'ui-icon-arrowthickstop-1-w',
+            slideRIcon: 'ui-icon-arrowthickstop-1-e',
+            slideLIconClpsd: 'ui-icon-arrowthickstop-1-e',
+            slideLIcon: 'ui-icon-arrowthickstop-1-w'
+        },
+
         _init: function() {
+            this._panelize();
+        },
+
+        // create panel
+        _panelize: function() {
             if (this.element.is('div')) {
                 var self = this,
                     o = this.options;
@@ -106,17 +157,18 @@
                     }
                     
                     // restore state from cookie
-                    if (o.cookie) {
+                    if (o.cookie){
                         if (self._cookie()==0)
                             o.collapsed = false;
                         else
                             o.collapsed = true;
                     }
+                    
                     // store state as data
                     this.panelBox.data('collapsed', o.collapsed);
 
                     // stackability (navigation panel emulation) for sliding panels
-                    if (o.stackable && (o.collapseType=='slide-right' || o.collapseType=='slide-left')){
+                    if (o.stackable && $.inArray(o.collapseType, ['slide-right', 'slide-left'])>-1){
 
                         this.panelDock = this.panelBox.siblings('div[role=panelDock]:first');
                         this.panelFrame = this.panelBox.siblings('div[role=panelFrame]:first');
@@ -148,8 +200,7 @@
 
                 this.panelBox.show();
 
-                // disabled panel handling
-                this.disable(o.disabled);
+
             }
         },
 
@@ -177,27 +228,6 @@
             
             this.toggle(o.collapseSpeed);
             return false;
-        },
-
-        // disables panel (usign appropiate ui class)
-        disable: function (disable){
-            var o = this.options;
-
-            if (disable===undefined)
-                disable = true;
-            
-            if (disable) {
-                this.panelBox.children().addClass(o.disableClass);
-                // lock panel controls
-                if (this.controlsBox)
-                    this.controlsBox.bind('click', function() {return false;});
-            } else {
-                this.panelBox.children().removeClass(o.disableClass);
-                if (this.controlsBox)
-                    this.controlsBox.unbind('click');
-            }
-            // save state
-            o.disabled = disable;
         },
 
         // toggle panel state (fold/unfold)
@@ -300,18 +330,20 @@
             }
 
             // only if not initially folded
-            if (collapseSpeed!=0 || o.trueVerticalText)
+            if ( ((collapseSpeed!=0 || o.trueVerticalText) && o.cookie==null) || (!innerCall && o.cookie!=null) )
                 o.collapsed = !o.collapsed;
 
-            panelBox.data('collapsed', o.collapsed);
+            this.panelBox.data('collapsed', o.collapsed);
 
-            // save state in cookie if allowed
-            if (o.cookie)
-                self._cookie(Number(o.collapsed), o.cookie);
+            if (!innerCall){
+                // save state in cookie if allowed
+                if (o.cookie)
+                    self._cookie(Number(o.collapsed), o.cookie);
 
-            // inner toggle call to show only one unfolded panel if 'accordion' option is set
-            if (o.accordion && !innerCall)
-                $("."+o.accordion+"[role='panel'][id!='"+(o.id)+"']:not(:data(collapsed))").panel('toggle', collapseSpeed, true);
+                // inner toggle call to show only one unfolded panel if 'accordion' option is set
+                if (o.accordion)
+                    $("."+o.accordion+"[role='panel'][id!='"+(o.id)+"']:not(:data(collapsed))").panel('toggle', collapseSpeed, true);
+            }
 
             // css animation for header and button
             this.collapseButton.toggleClass(this.iconBtnClpsd).toggleClass(this.iconBtn);
@@ -329,24 +361,22 @@
 
             this.headerBox
                 .html(this.titleText)
-                .attr('align', 'default')
-                .css('height', 'auto')
-                .removeClass('ui-panel-vtitle')
-                .removeClass('ui-corner-all')
-                .removeClass(o.headerClass);
+                .removeAttr('align')
+                .removeAttr('style')
+                .removeClass('ui-panel-vtitle ui-corner-all '+o.headerClass);
             this.contentBox
                 .removeClass(o.contentClass)
-                .css('display', 'block')
+                .removeAttr('style')
                 .html(o.content);
             this.panelBox
                 .removeAttr('role')
+                .removeAttr('style')
                 .removeData('collapsed')
                 .unbind('.panel')
-                .css({'width':o.width, 'display':'block'})
                 .removeClass(o.widgetClass);
 
             // handle stacked panels
-            if (o.stackable){
+            if (o.stackable && $.inArray(o.collapseType, ['slide-right', 'slide-left'])>-1){
                 this.panelDock.before(this.panelBox);
                 // with last stacked panel we destroy Dock and Frame stack components
                 if (this.panelDock.children('div[role=panel]').length==0
@@ -374,52 +404,7 @@
     });
 
     $.extend($.ui.panel, {
-        version: '0.5',
-        defaults: {
-            event: 'click',
-            collapsible: true,
-            collapseType: 'default',
-            collapsed: false,
-            accordion: false,
-            collapseSpeed: 'fast',
-            draggable: false,
-            disabled: false,
-            // ----------
-            // options for 'slide-left' & 'slide-right' collapseType panels only
-                // true vertical text with svg or filter rendering
-                trueVerticalText: true,
-                // collapsed panel height, neccessary for true vertical text
-                vHeight: '220px',
-                // automatically create special stack area (navigation window emulation)
-                stackable: true,
-            // ----------
-            // panel width
-            width: 'auto',
-            // suppose that we need ui.toolbar with controls here
-            controls: false,
-            // store panel state in cookie (jQuery cookie Plugin needed - http://plugins.jquery.com/project/cookie)
-            cookie: null, // accepts cookie plugin options, e.g. { name: 'myPanel', expires: 7, path: '/', domain: 'jquery.com', secure: true }
-            // styling
-            widgetClass: 'ui-helper-reset ui-widget ui-panel',
-            headerClass: 'ui-helper-reset ui-widget-header ui-panel-header ui-corner-top',
-            contentClass: 'ui-helper-reset ui-widget-content ui-panel-content ui-corner-bottom',
-            contentTextClass: 'ui-panel-content-text',
-            rightboxClass: 'ui-panel-rightbox',
-            controlsClass: 'ui-panel-controls',
-            titleClass: 'ui-panel-title',
-            titleTextClass: 'ui-panel-title-text',
-            iconClass: 'ui-icon',
-            hoverClass: 'ui-state-hover',
-            disableClass: 'ui-state-disabled',
-            collapsePnlClass: 'ui-panel-clps-pnl',
-            //icons
-            headerIconClpsd: 'ui-icon-triangle-1-e',
-            headerIcon: 'ui-icon-triangle-1-s',
-            slideRIconClpsd: 'ui-icon-arrowthickstop-1-w',
-            slideRIcon: 'ui-icon-arrowthickstop-1-e',
-            slideLIconClpsd: 'ui-icon-arrowthickstop-1-e',
-            slideLIcon: 'ui-icon-arrowthickstop-1-w'
-        }
+        version: '0.6'
     });
 
 })(jQuery);

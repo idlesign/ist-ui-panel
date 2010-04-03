@@ -1,10 +1,10 @@
 <!doctype html>
 <head>
 	<title>jQuery UI - Draft Content grouping / Panel Advanced Demo</title>
-	<script type="text/javascript" src="jquery-1.4.1.min.js"></script>
+	<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 	
-	<script type="text/javascript" src="jquery-ui-1.7.custom.min.js"></script>
-	<link type="text/css" href="jquery-ui-1.7.custom.css" rel="stylesheet" />
+	<script type="text/javascript" src="jquery-ui-1.8.custom.min.js"></script>
+	<link type="text/css" href="jquery-ui-1.8.custom.css" rel="stylesheet" />
 
 	<script type="text/javascript" src="ui.panel.min.js"></script>
 	<link type="text/css" href="ui.panel.css" rel="stylesheet" />
@@ -99,7 +99,7 @@
 <div class="box">
     <p>
 	This is jQuery UI Draft <b>Content grouping / Panel</b> advanced demonstration.<br/>
-        Latest source at <a href="http://code.google.com/p/ist-ui-panel/">http://code.google.com/p/ist-ui-panel/</a>, also available at jQuery UI Labs: <a href="http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel/">http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel</a><br/>
+        Latest source at <a href="http://github.com/idlesign/ist-ui-panel/">http://github.com/idlesign/ist-ui-panel/</a>, also available at jQuery UI Labs: <a href="http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel/">http://code.google.com/p/jquery-ui/source/browse/#svn/branches/labs/panel</a><br/>
         Old simple demo (without IE layout issues) is <a href="demo_simple.htm">here</a>.
     </p>
 </div>
@@ -280,13 +280,13 @@
                     </ul>
                     <b>And more:</b>
                     <ul>
-                        <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('disable', true);$('#pan_enable').show()">disable this panel</span> using .panel('disable', true).</li>
+                        <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('disable');$('#pan_enable').show()">disable this panel</span> using .panel('disable').</li>
                         <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('content', 'New content ;)');">replace this content </span> using .panel('content', 'New content ;)').</li>
                         <li>You can <span class="fakeLink" onClick="$('#panelCenter_4').panel('destroy');">destroy this panel </span> using .panel('destroy'). Initial panel content would be restored.</li>
                     </ul>
 		</div>
 	    </div>
-            <div id="pan_enable" style="display:none;color:navy;cursor:pointer;" onClick="$('#panelCenter_4').panel('disable', false);$(this).hide();">Enable panel above using .panel('disable', false).</div>
+            <div id="pan_enable" style="display:none;color:navy;cursor:pointer;" onClick="$('#panelCenter_4').panel('enable');$(this).hide();">Enable panel above using .panel('enable').</div>
 
 	</div>
     </div>
