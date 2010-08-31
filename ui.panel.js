@@ -93,7 +93,7 @@
                 this.titleBox = this.headerBox.children(':first');
                 this.titleTextBox = this.titleBox.children(':first');
                 this.titleText = this.titleTextBox.html();
-                this.headerBox.prepend('<span/>')
+                this.headerBox.prepend('<span/>');
                 this.rightBox = this.headerBox.children(':first').addClass(o.rightboxClass);
                 // setting up controls
                 if (o.controls!=false){

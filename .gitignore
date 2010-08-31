@@ -1,0 +1,6 @@
+nbproject
+.project
+releases
+.settings
+*.sh
+*.jar
