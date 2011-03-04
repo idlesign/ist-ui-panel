@@ -1,3 +1,14 @@
+
+
+NOTE: This Panel plugin version is somewhat outdated, if not to say unsupported.
+      You might be interesting in a new version of this plugin.
+      It can be found at https://github.com/idlesign/jquery-ui repository.
+      To be more precise at https://github.com/idlesign/jquery-ui/blob/master/ui/jquery.ui.panel.js
+
+
+
+==========
+
 'Panel / Content Grouping' Draft for jQuery UI
 (ist-ui-panel)
 
