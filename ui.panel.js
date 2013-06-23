@@ -69,7 +69,7 @@
 
         // create panel
         _panelize: function() {
-            if (this.element.is('div')) {
+            if (this.element.is('div')  || this.element.is('article')) {
                 var self = this,
                     o = this.options;
 
